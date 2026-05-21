@@ -14,9 +14,12 @@ app.use(helmet({ crossOriginResourcePolicy: false, contentSecurityPolicy: false 
 app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
 app.use(express.json());
 
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
+const limiter = rateLimit({ 
+  windowMs: 15 * 60 * 1000, 
+  max: 100,
+  validate: { xForwardedForHeader: false }
+});
 app.use("/api/", limiter);
-
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/gigs", require("./routes/gigs"));
 app.use("/api/orders", require("./routes/orders"));
