@@ -10,16 +10,15 @@ connectDB();
 
 const app = express();
 
+app.set("trust proxy", 1);
+
 app.use(helmet({ crossOriginResourcePolicy: false, contentSecurityPolicy: false }));
-app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
+app.use(cors({ origin: "*" }));
 app.use(express.json());
 
-const limiter = rateLimit({ 
-  windowMs: 15 * 60 * 1000, 
-  max: 100,
-  validate: { xForwardedForHeader: false }
-});
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100, validate: { xForwardedForHeader: false } });
 app.use("/api/", limiter);
+
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/gigs", require("./routes/gigs"));
 app.use("/api/orders", require("./routes/orders"));
