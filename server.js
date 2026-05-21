@@ -10,7 +10,7 @@ connectDB();
 
 const app = express();
 
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: false, contentSecurityPolicy: false }));
 app.use(cors({ origin: process.env.CLIENT_URL || "*" }));
 app.use(express.json());
 
